@@ -2,6 +2,7 @@
 ## 🛒 Shopping Cart Game
 
 Welcome to the **Shopping Cart Game**, a fun and psychologically intriguing browser-based challenge!
+
 play here -> https://duskwoodfire.github.io/ShoppingCartGame/
 
 ## 🎮 Game Description
