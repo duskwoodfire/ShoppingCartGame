@@ -1,0 +1,425 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Shopping Cart Game</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+
+    html, body {
+      margin: 0;
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      background: url('https://i.pinimg.com/736x/ea/59/9d/ea599d5425ce78d39212c0b03c179501.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      overflow-y: auto; /* Scroll enabled */
+    }
+
+    h1 {
+      margin: 20px 0 10px 0;
+      font-size: 2rem;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      color: #fff;
+      background: #6b5b95;
+      padding: 10px 40px;
+      border-radius: 50px;
+      box-shadow: 0 5px 15px rgba(107, 91, 149, 0.7);
+      user-select: none;
+      text-align: center;
+    }
+
+    #instruction {
+      color: #000;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      text-align: center;
+      max-width: 600px;
+      padding: 15px 20px;
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 15px;
+      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      user-select: none;
+    }
+
+    #start-btn, #play-again-btn {
+      padding: 12px 30px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 30px;
+      background: #6b5b95;
+      color: #fff;
+      cursor: pointer;
+      margin-bottom: 15px;
+      transition: background 0.3s ease;
+    }
+
+    #start-btn:hover, #play-again-btn:hover {
+      background: #574a7e;
+    }
+
+    #play-again-btn {
+      display: none;
+    }
+
+    #game-container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 60px;
+      margin-top: 30px;
+      width: 90vw;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-right: 20px;
+      flex-grow: 1;
+    }
+
+    #grid {
+      display: grid;
+      grid-template-columns: repeat(3, 140px);
+      grid-template-rows: repeat(3, 140px);
+      gap: 30px;
+      justify-content: center;
+      flex-grow: 0;
+    }
+
+    .circle {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      overflow: hidden;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease, border 0.3s ease;
+      position: relative;
+      user-select: none;
+    }
+
+    .circle:hover {
+      transform: scale(1.07) rotate(-2deg);
+    }
+
+    .circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .circle span {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255, 255, 255, 0.8);
+      padding: 5px 14px;
+      border-radius: 16px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #333;
+      backdrop-filter: blur(6px);
+      pointer-events: none;
+      user-select: none;
+      text-align: center;
+      max-width: 90%;
+    }
+
+    #list-container {
+      width: 250px;
+      background: url('https://i.pinimg.com/736x/cb/41/33/cb41331019f8f2eb525d01eff5881416.jpg') no-repeat center center;
+      background-size: cover;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      flex-shrink: 0;
+      user-select: none;
+      height: fit-content;
+    }
+
+    #list-container h3 {
+      color: #000;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      margin-bottom: 15px;
+      text-align: center;
+      font-size: 1.3rem;
+    }
+
+    #grocery-list {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 15px;
+      padding: 15px 20px;
+      font-size: 1rem;
+      list-style: decimal inside;
+      text-align: center;
+      max-height: 400px;
+      overflow-y: auto;
+      user-select: text;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+    }
+
+    #timer {
+      margin-top: 10px;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #fff;
+      background: #ff4b4b;
+      padding: 14px 36px;
+      border-radius: 50px;
+      box-shadow: 0 0 20px rgba(255,75,75,0.7);
+      user-select: none;
+      text-align: center;
+      min-width: 160px;
+      display: none;
+    }
+
+    #result {
+      margin-top: 25px;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 2px 2px 6px #000;
+      user-select: none;
+      min-height: 40px;
+      text-align: center;
+    }
+
+    .result-timeup {
+      color: #000 !important;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      text-shadow: none;
+    }
+
+    @media (max-width: 800px) {
+      #game-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+      }
+      #list-container {
+        width: 90%;
+        max-width: 300px;
+      }
+      #grid {
+        grid-template-columns: repeat(3, 110px);
+        grid-template-rows: repeat(3, 110px);
+        gap: 20px;
+      }
+      .circle {
+        width: 110px;
+        height: 110px;
+      }
+      .circle img {
+        width: 65%;
+        height: 65%;
+      }
+      #timer {
+        min-width: 140px;
+        font-size: 1.4rem;
+        padding: 12px 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🛒 Shopping Cart Game</h1>
+  <div id="instruction">
+    Instruction 👉 Click on vegetable <strong>PHOTOS</strong> (Not Names) in the exact order as given in the grocery list.
+    <br>The names and photos are a mismatch!<br>
+    Complete the list <strong>within 20 seconds</strong>.
+  </div>
+  <button id="start-btn">Start Game</button>
+  <button id="play-again-btn">Play Again</button>
+  <div id="timer">Time: 20s</div>
+
+  <div id="game-container">
+    <div id="grid"></div>
+    <div id="list-container">
+      <h3>🧾 Grocery List</h3>
+      <ol id="grocery-list"></ol>
+    </div>
+  </div>
+
+  <div id="result"></div>
+  <div class="confetti" id="confetti"></div>
+
+  <script>
+    const items = [
+      { name: "Carrot", img: "https://i.pinimg.com/736x/58/d2/c0/58d2c000a73ce66d34e5abded7d038b2.jpg" },
+      { name: "Tomato", img: "https://i.pinimg.com/736x/13/dc/c4/13dcc4d6c9bdf984fb77e4bdd9e0bbd5.jpg" },
+      { name: "Broccoli", img: "https://i.pinimg.com/736x/bb/b4/d0/bbb4d08338ea1b06557e1bab438eee76.jpg" },
+      { name: "Potato", img: "https://i.pinimg.com/736x/7e/65/2d/7e652dca58c966e0d86616d35146793e.jpg" },
+      { name: "Cabbage", img: "https://i.pinimg.com/736x/af/d9/95/afd99501b315fc21aff1de17e46eb4bd.jpg" },
+      { name: "Onion", img: "https://i.pinimg.com/736x/8f/8d/77/8f8d773f7735225d0cb5127a0d0a588f.jpg" },
+      { name: "Spinach", img: "https://i.pinimg.com/736x/d9/f7/0e/d9f70e5fe16acaa731788f5affbe1a06.jpg" },
+      { name: "BellPepper", img: "https://i.pinimg.com/736x/51/a7/83/51a783dd5a61c7dba5115d92f7b6786b.jpg" },
+      { name: "Cauliflower", img: "https://i.pinimg.com/736x/9c/0f/47/9c0f476cf96114e6500caa134c8aeb1a.jpg" }
+    ];
+
+    const grid = document.getElementById("grid");
+    const groceryListEl = document.getElementById("grocery-list");
+    const timerDisplay = document.getElementById("timer");
+    const resultDisplay = document.getElementById("result");
+    const startBtn = document.getElementById("start-btn");
+    const playAgainBtn = document.getElementById("play-again-btn");
+
+    let groceryList = [];
+    let images = [];
+    let decoyNames = [];
+    let currentIndex = 0;
+    let timeLeft = 20;
+    let interval = null;
+    let correctClicks = 0;
+
+    function setupGame() {
+      groceryList = [...items].sort(() => 0.5 - Math.random());
+      images = [...items].sort(() => 0.5 - Math.random());
+      decoyNames = [...items].sort(() => 0.5 - Math.random());
+
+      while (images.some((item, i) => item.name === decoyNames[i].name)) {
+        decoyNames = [...items].sort(() => 0.5 - Math.random());
+      }
+
+      grid.innerHTML = '';
+      groceryListEl.innerHTML = '';
+      resultDisplay.textContent = '';
+      resultDisplay.classList.remove('result-timeup');
+      timerDisplay.textContent = "Time: 20s";
+      currentIndex = 0;
+      timeLeft = 20;
+      correctClicks = 0;
+
+      for (let i = 0; i < 9; i++) {
+        const circle = document.createElement("div");
+        circle.classList.add("circle");
+        circle.dataset.vegetable = images[i].name;
+
+        const img = document.createElement("img");
+        img.src = images[i].img;
+
+        const label = document.createElement("span");
+        label.textContent = decoyNames[i].name;
+
+        circle.appendChild(img);
+        circle.appendChild(label);
+        grid.appendChild(circle);
+
+        circle.addEventListener("click", () => {
+          if (!interval) return;
+          if (images[i].name === groceryList[currentIndex].name) {
+            circle.style.border = "4px solid #32CD32";
+            currentIndex++;
+            correctClicks++;
+            if (currentIndex === groceryList.length) {
+              winGame();
+            }
+          } else {
+            circle.style.border = "4px solid #ff4b4b";
+            setTimeout(() => {
+              circle.style.border = "none";
+            }, 600);
+          }
+        });
+      }
+
+      groceryList.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item.name;
+        groceryListEl.appendChild(li);
+      });
+    }
+
+    function startGame() {
+      if (interval) {
+        clearInterval(interval);
+        interval = null;
+      }
+      setupGame();
+      timerDisplay.style.display = "inline-block";
+      startBtn.style.display = "none";
+      playAgainBtn.style.display = "none";
+      resultDisplay.textContent = '';
+
+      interval = setInterval(() => {
+        timeLeft--;
+        timerDisplay.textContent = `Time: ${timeLeft}s`;
+        if (timeLeft <= 0) {
+          endGame(false);
+        }
+      }, 1000);
+    }
+
+    function endGame(didWin) {
+      clearInterval(interval);
+      interval = null;
+      timerDisplay.style.display = "none";
+      playAgainBtn.style.display = "inline-block";
+
+      let message = "";
+      if (didWin) {
+        message = `🎉 Amazing! You completed the list perfectly! Score: ${correctClicks} / ${groceryList.length}`;
+        resultDisplay.classList.remove('result-timeup');
+        showConfetti();
+      } else {
+        message = `⏰ Time's up! You got ${correctClicks} out of ${groceryList.length} correct. Try again!`;
+        resultDisplay.classList.add('result-timeup');
+      }
+
+      resultDisplay.textContent = message;
+    }
+
+    function winGame() {
+      endGame(true);
+    }
+
+    function showConfetti() {
+      const confetti = document.getElementById("confetti");
+      confetti.innerHTML = '';
+      const count = 80;
+      for (let i = 0; i < count; i++) {
+        const dot = document.createElement("div");
+        dot.classList.add("dot");
+        dot.style.setProperty('--hue', Math.floor(Math.random() * 360));
+        dot.style.left = Math.random() * 100 + "vw";
+        dot.style.animationDelay = (Math.random() * 1) + "s";
+        dot.style.animationDuration = (Math.random() * 1 + 1) + "s";
+        dot.style.top = -10 + "px";
+        confetti.appendChild(dot);
+        setTimeout(() => {
+          dot.remove();
+        }, 2000);
+      }
+    }
+
+    startBtn.addEventListener("click", startGame);
+
+    playAgainBtn.addEventListener("click", () => {
+      playAgainBtn.style.display = "none";
+      startBtn.style.display = "inline-block";
+      resultDisplay.textContent = "";
+      resultDisplay.classList.remove('result-timeup');
+      timerDisplay.style.display = "none";
+      clearInterval(interval);
+      interval = null;
+    });
+  </script>
+  <br>
+  <p>Created by @duskwoodfire</p>
+</body>
+</html>
